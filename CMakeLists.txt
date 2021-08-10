@@ -56,8 +56,12 @@ include_directories( include ${catkin_INCLUDE_DIRS})
 
 #header only for the time being
 
-#add_library(behaviortree_ros ... )
-#target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+add_library(${PROJECT_NAME}
+  src/loggers/rosout_logger.cpp
+)
+target_link_libraries(${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
 
 ######################################################
 # TESTS
@@ -72,7 +76,16 @@ target_link_libraries(test_server ${catkin_LIBRARIES} )
 
 ######################################################
 # INSTALL
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
 
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
 
 ######################################################
 # EXAMPLES and TOOLS
