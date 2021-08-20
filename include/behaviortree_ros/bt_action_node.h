@@ -158,7 +158,26 @@ protected:
     else
     {
       // FIXME: is there any other valid state we should consider?
-      throw std::logic_error("Unexpected state in RosActionNode::tick()");
+      std::string state;
+      if (action_state == actionlib::SimpleClientGoalState::RECALLED)
+      {
+        state = "RECALLED";
+      }
+      else if (action_state == actionlib::SimpleClientGoalState::PREEMPTED)
+      {
+        state = "PREEMPTED";
+      }
+      else if (action_state == actionlib::SimpleClientGoalState::LOST)
+      {
+        state = "LOST";
+      }
+      else
+      {
+        state = "unknown";
+      }
+      std::string msg = std::string("Unexpected state(") + \
+                        state + ") in RosActionNode::tick()";
+      throw std::logic_error(msg);
     }
   }
 };
