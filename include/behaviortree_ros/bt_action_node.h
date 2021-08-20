@@ -81,7 +81,8 @@ public:
   enum FailureCause{
     MISSING_SERVER = 0,
     ABORTED_BY_SERVER = 1,
-    REJECTED_BY_SERVER = 2
+    REJECTED_BY_SERVER = 2,
+    PREEMPTED_BY_CLIENT = 3
   };
 
   /// Called when a service call failed. Can be overriden by the user.
@@ -155,6 +156,10 @@ protected:
     {
       return onFailedRequest( REJECTED_BY_SERVER );
     }
+    else if( action_state == actionlib::SimpleClientGoalState::PREEMPTED)
+    {
+      return onFailedRequest( PREEMPTED_BY_CLIENT );
+    }
     else
     {
       // FIXME: is there any other valid state we should consider?
@@ -162,10 +167,6 @@ protected:
       if (action_state == actionlib::SimpleClientGoalState::RECALLED)
       {
         state = "RECALLED";
-      }
-      else if (action_state == actionlib::SimpleClientGoalState::PREEMPTED)
-      {
-        state = "PREEMPTED";
       }
       else if (action_state == actionlib::SimpleClientGoalState::LOST)
       {
