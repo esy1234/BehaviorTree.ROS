@@ -82,7 +82,8 @@ public:
     MISSING_SERVER = 0,
     ABORTED_BY_SERVER = 1,
     REJECTED_BY_SERVER = 2,
-    PREEMPTED_BY_CLIENT = 3
+    PREEMPTED_BY_CLIENT = 3,
+    LOST = 4
   };
 
   /// Called when a service call failed. Can be overriden by the user.
@@ -159,6 +160,10 @@ protected:
     else if( action_state == actionlib::SimpleClientGoalState::PREEMPTED)
     {
       return onFailedRequest( PREEMPTED_BY_CLIENT );
+    }
+    else if ( action_state == actionlib::SimpleClientGoalState::LOST)
+    {
+      return onFailedRequest( LOST );
     }
     else
     {
